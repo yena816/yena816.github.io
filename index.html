@@ -1,1 +1,125 @@
-"Hello World" 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3.js Slideshow</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .slideshow-container {
+            position: relative;
+            max-width: 1000px;
+            margin: auto;
+        }
+        .slide {
+            display: none;
+            text-align: center;
+        }
+        .active {
+            display: block;
+        }
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            margin-top: -22px;
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+        }
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+        .prev {
+            left: 0;
+            border-radius: 3px 3px 0 0;
+        }
+        .dot-container {
+            text-align: center;
+            padding: 20px;
+            background: #ddd;
+        }
+        .dot {
+            cursor: pointer;
+            height: 15px;
+            width: 15px;
+            margin: 0 2px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.6s ease;
+        }
+        .active-dot {
+            background-color: #717171;
+        }
+    </style>
+</head>
+<body>
+
+<div class="slideshow-container">
+    <div class="slide">
+        <img src="https://via.placeholder.com/1000x400" alt="Slide 1">
+    </div>
+    <div class="slide">
+        <img src="https://via.placeholder.com/1000x400" alt="Slide 2">
+    </div>
+    <div class="slide">
+        <img src="https://via.placeholder.com/1000x400" alt="Slide 3">
+    </div>
+
+    <a class="prev">&#10094;</a>
+    <a class="next">&#10095;</a>
+</div>
+
+<div class="dot-container">
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+</div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var slides = d3.selectAll(".slide");
+        var dots = d3.selectAll(".dot");
+        var currentIndex = 0;
+
+        function showSlide(index) {
+            slides.style("display", "none");
+            dots.classed("active-dot", false);
+
+            slides.filter((d, i) => i === index).style("display", "block");
+            dots.filter((d, i) => i === index).classed("active-dot", true);
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % slides.size();
+            showSlide(currentIndex);
+        }
+
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + slides.size()) % slides.size();
+            showSlide(currentIndex);
+        }
+
+        d3.select(".next").on("click", nextSlide);
+        d3.select(".prev").on("click", prevSlide);
+        dots.on("click", function(event, d, i) {
+            currentIndex = i;
+            showSlide(currentIndex);
+        });
+
+        showSlide(currentIndex);
+    });
+</script>
+
+</body>
+</html>
