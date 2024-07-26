@@ -3,25 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D3 World Map</title>
-    <style>
-        .tooltip {
-            position: absolute;
-            text-align: center;
-            width: 120px;
-            height: auto;
-            padding: 5px;
-            font: 12px sans-serif;
-            background: lightsteelblue;
-            border: 0px;
-            border-radius: 8px;
-            pointer-events: none;
-        }
-    </style>
+    <title>JPScaleCtry Bar Chart</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
 </head>
 <body>
-<h1>First chart</h1>
-    <div id="map"></div>
+    <div id="chart"></div>
+    <script src="script.js"></script>
+</body>
+</html>
+
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://d3js.org/topojson.v3.min.js"></script>
     <script>
@@ -48,7 +38,7 @@ d3.csv(csvUrl).then(function(data) {
     }
 
     // Set dimensions and margins for the chart
-    const margin = { top: 20, right: 30, bottom: 40, left: 40 },
+    const margin = { top: 20, right: 30, bottom: 60, left: 60 },
           width = 800 - margin.left - margin.right,
           height = 400 - margin.top - margin.bottom;
 
@@ -91,8 +81,21 @@ d3.csv(csvUrl).then(function(data) {
         .attr('width', x.bandwidth())
         .attr('height', d => height - y(d.count))
         .attr('fill', 'steelblue');
+
+    // Add x-axis label
+    svg.append('text')
+        .attr('text-anchor', 'end')
+        .attr('x', width / 2 + margin.left)
+        .attr('y', height + margin.bottom - 10)
+        .text('JP Scale');
+
+    // Add y-axis label
+    svg.append('text')
+        .attr('text-anchor', 'end')
+        .attr('transform', 'rotate(-90)')
+        .attr('y', -margin.left + 20)
+        .attr('x', -height / 2 + margin.top)
+        .text('Number of Countries');
 });
 
     </script>
-</body>
-</html>
