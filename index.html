@@ -3,123 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D3.js Slideshow</title>
+    <title>D3 World Map</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .slideshow-container {
-            position: relative;
-            max-width: 1000px;
-            margin: auto;
-        }
-        .slide {
-            display: none;
-            text-align: center;
-        }
-        .active {
-            display: block;
-        }
-        .prev, .next {
-            cursor: pointer;
+        .tooltip {
             position: absolute;
-            top: 50%;
-            width: auto;
-            margin-top: -22px;
-            padding: 16px;
-            color: white;
-            font-weight: bold;
-            font-size: 18px;
-            transition: 0.6s ease;
-            border-radius: 0 3px 3px 0;
-            user-select: none;
-        }
-        .next {
-            right: 0;
-            border-radius: 3px 0 0 3px;
-        }
-        .prev {
-            left: 0;
-            border-radius: 3px 3px 0 0;
-        }
-        .dot-container {
             text-align: center;
-            padding: 20px;
-            background: #ddd;
-        }
-        .dot {
-            cursor: pointer;
-            height: 15px;
-            width: 15px;
-            margin: 0 2px;
-            background-color: #bbb;
-            border-radius: 50%;
-            display: inline-block;
-            transition: background-color 0.6s ease;
-        }
-        .active-dot {
-            background-color: #717171;
+            width: 120px;
+            height: auto;
+            padding: 5px;
+            font: 12px sans-serif;
+            background: lightsteelblue;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
+    <div id="map"></div>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://d3js.org/topojson.v3.min.js"></script>
+    <script src="world-110m.v1.json"></script> <!-- This JSON file should be included in your project -->
+    <script>
+        d3.csv("/mnt/data/AllPeoplesByCountry.csv").then(data => {
+            var width = 960, height = 600;
+            var projection = d3.geoMercator().scale(150).translate([width / 2, height / 1.5]);
+            var path = d3.geoPath().projection(projection);
 
-<div class="slideshow-container">
-    <div class="slide">
-        <img src="https://via.placeholder.com/1000x400" alt="Slide 1">
-    </div>
-    <div class="slide">
-        <img src="https://via.placeholder.com/1000x400" alt="Slide 2">
-    </div>
-    <div class="slide">
-        <img src="https://via.placeholder.com/1000x400" alt="Slide 3">
-    </div>
+            var svg = d3.select("#map").append("svg")
+                        .attr("width", width)
+                        .attr("height", height);
 
-    <a class="prev">&#10094;</a>
-    <a class="next">&#10095;</a>
-</div>
+            var tooltip = d3.select("body").append("div")
+                            .attr("class", "tooltip")
+                            .style("opacity", 0);
 
-<div class="dot-container">
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-</div>
-
-<script src="https://d3js.org/d3.v7.min.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var slides = d3.selectAll(".slide");
-        var dots = d3.selectAll(".dot");
-        var currentIndex = 0;
-
-        function showSlide(index) {
-            slides.style("display", "none");
-            dots.classed("active-dot", false);
-
-            slides.filter((d, i) => i === index).style("display", "block");
-            dots.filter((d, i) => i === index).classed("active-dot", true);
-        }
-
-        function nextSlide() {
-            currentIndex = (currentIndex + 1) % slides.size();
-            showSlide(currentIndex);
-        }
-
-        function prevSlide() {
-            currentIndex = (currentIndex - 1 + slides.size()) % slides.size();
-            showSlide(currentIndex);
-        }
-
-        d3.select(".next").on("click", nextSlide);
-        d3.select(".prev").on("click", prevSlide);
-        dots.on("click", function(event, d, i) {
-            currentIndex = i;
-            showSlide(currentIndex);
+            d3.json("world-110m.v1.json").then(world => {
+                svg.append("g")
+                   .selectAll("path")
+                   .data(topojson.feature(world, world.objects.countries).features)
+                   .enter().append("path")
+                   .attr("d", path)
+                   .attr("class", "country")
+                   .on("mouseover", function(event, d) {
+                       var countryData = data.find(country => country.Country === d.properties.name);
+                       if (countryData) {
+                           tooltip.transition().duration(200).style("opacity", .9);
+                           tooltip.html("Country: " + countryData.Country + "<br/>Population: " + countryData.Population + "<br/>Primary Language: " + countryData.PrimaryLanguage)
+                                  .style("left", (event.pageX + 5) + "px")
+                                  .style("top", (event.pageY - 28) + "px");
+                       }
+                   })
+                   .on("mouseout", function(d) {
+                       tooltip.transition().duration(500).style("opacity", 0);
+                   });
+            });
         });
-
-        showSlide(currentIndex);
-    });
-</script>
-
+    </script>
 </body>
 </html>
