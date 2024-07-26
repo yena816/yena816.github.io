@@ -20,45 +20,79 @@
     </style>
 </head>
 <body>
+<h1>First chart</h1>
     <div id="map"></div>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://d3js.org/topojson.v3.min.js"></script>
-    <script src="world-110m.v1.json"></script> <!-- This JSON file should be included in your project -->
     <script>
-        d3.csv("/mnt/data/AllPeoplesByCountry.csv").then(data => {
-            var width = 960, height = 600;
-            var projection = d3.geoMercator().scale(150).translate([width / 2, height / 1.5]);
-            var path = d3.geoPath().projection(projection);
+        // Replace this URL with the raw URL of your CSV file in your GitHub repo
+        const csvUrl = "https://raw.githubusercontent.com/yena816/yena816.github.io/main/AllCountriesListing.csv";
 
-            var svg = d3.select("#map").append("svg")
-                        .attr("width", width)
-                        .attr("height", height);
+        // Load the CSV data
+d3.csv(csvUrl).then(function(data) {
+    // Process data to get counts for each JPScaleCtry value
+    let scaleCounts = {};
+    data.forEach(function(d) {
+        let scale = d.JPScaleCtry;
+        if (scaleCounts[scale]) {
+            scaleCounts[scale]++;
+        } else {
+            scaleCounts[scale] = 1;
+        }
+    });
 
-            var tooltip = d3.select("body").append("div")
-                            .attr("class", "tooltip")
-                            .style("opacity", 0);
+    // Convert counts to an array for D3
+    let countsArray = [];
+    for (let scale in scaleCounts) {
+        countsArray.push({ scale: scale, count: scaleCounts[scale] });
+    }
 
-            d3.json("world-110m.v1.json").then(world => {
-                svg.append("g")
-                   .selectAll("path")
-                   .data(topojson.feature(world, world.objects.countries).features)
-                   .enter().append("path")
-                   .attr("d", path)
-                   .attr("class", "country")
-                   .on("mouseover", function(event, d) {
-                       var countryData = data.find(country => country.Country === d.properties.name);
-                       if (countryData) {
-                           tooltip.transition().duration(200).style("opacity", .9);
-                           tooltip.html("Country: " + countryData.Country + "<br/>Population: " + countryData.Population + "<br/>Primary Language: " + countryData.PrimaryLanguage)
-                                  .style("left", (event.pageX + 5) + "px")
-                                  .style("top", (event.pageY - 28) + "px");
-                       }
-                   })
-                   .on("mouseout", function(d) {
-                       tooltip.transition().duration(500).style("opacity", 0);
-                   });
-            });
-        });
+    // Set dimensions and margins for the chart
+    const margin = { top: 20, right: 30, bottom: 40, left: 40 },
+          width = 800 - margin.left - margin.right,
+          height = 400 - margin.top - margin.bottom;
+
+    // Create SVG container
+    const svg = d3.select('#chart')
+        .append('svg')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+        .append('g')
+        .attr('transform', `translate(${margin.left},${margin.top})`);
+
+    // Set the x scale
+    const x = d3.scaleBand()
+        .domain(countsArray.map(d => d.scale))
+        .range([0, width])
+        .padding(0.1);
+
+    // Set the y scale
+    const y = d3.scaleLinear()
+        .domain([0, d3.max(countsArray, d => d.count)])
+        .nice()
+        .range([height, 0]);
+
+    // Add the x axis
+    svg.append('g')
+        .attr('transform', `translate(0,${height})`)
+        .call(d3.axisBottom(x));
+
+    // Add the y axis
+    svg.append('g')
+        .call(d3.axisLeft(y));
+
+    // Add bars
+    svg.selectAll('.bar')
+        .data(countsArray)
+        .enter().append('rect')
+        .attr('class', 'bar')
+        .attr('x', d => x(d.scale))
+        .attr('y', d => y(d.count))
+        .attr('width', x.bandwidth())
+        .attr('height', d => height - y(d.count))
+        .attr('fill', 'steelblue');
+});
+
     </script>
 </body>
 </html>

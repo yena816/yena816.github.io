@@ -1,6 +1,4 @@
-﻿Joshua Project People Group Data
-
-ROG3,ISO3,ISO2,Ctry,PoplPeoples,CntPeoples,CntPeoplesLR,PoplPeoplesLR,JPScaleCtry,ROL3OfficialLanguage,OfficialLang,RLG3Primary,ReligionPrimary,PercentChristianity,PercentEvangelical,10_40Window,ROG2,Continent,RegionCode,RegionName,PercentUrbanized,LiteracyRate,WorkersNeeded
+﻿ROG3,ISO3,ISO2,Ctry,PoplPeoples,CntPeoples,CntPeoplesLR,PoplPeoplesLR,JPScaleCtry,ROL3OfficialLanguage,OfficialLang,RLG3Primary,ReligionPrimary,PercentChristianity,PercentEvangelical,10_40Window,ROG2,Continent,RegionCode,RegionName,PercentUrbanized,LiteracyRate,WorkersNeeded
 AF,AFG,AF,Afghanistan,43265000,70,68,43264000,1,pbt,"Pashto, Southern",6,Islam,0.017175311421022,0.014292938218787,Y,ASI,Asia,5,"Asia, Central",27,43,904
 AL,ALB,AL,Albania,2794000,15,3,39000,2,aln,"Albanian, Gheg",6,Islam,33.677352041501,0.61188996845871,Y,EUR,Europe,9,"Europe, Eastern and Eurasia",64,98,3
 AG,DZA,DZ,Algeria,46193000,38,34,46159000,1,arb,"Arabic, Standard",6,Islam,0.076113240226293,0.045811668090712,Y,AFR,Africa,6,"Africa, North and Middle East",75,81,939
@@ -239,21 +237,3 @@ WI,ESH,EH,"Western Sahara",529000,10,10,529000,1,ary,"Arabic, Moroccan",6,Islam,
 YM,YEM,YE,Yemen,35050000,29,20,34945000,1,arb,"Arabic, Standard",6,Islam,0.19903142182364,0.021037700990741,Y,ASI,Asia,6,"Africa, North and Middle East",37,70,703
 ZA,ZMB,ZM,Zambia,21072000,75,3,108000,5,eng,English,1,Christianity,86.47942609726,24.926942246886,N,AFR,Africa,7,"Africa, East and Southern",44,87,3
 ZI,ZWE,ZW,Zimbabwe,16922000,41,2,29000,5,eng,English,1,Christianity,76.968430744301,25.199136747628,N,AFR,Africa,7,"Africa, East and Southern",32,89,2
-
-Bible Translation status:
-0,Unspecified
-1,Translation Needed
-2,Translation Started
-3,Portions
-4,New Testament
-5,Complete Bible
-
-"Joshua Project welcomes corrections / updates to this data.  Please send feedback to:"
-
-Email:,info@joshuaproject.net
-Web:,www.joshuaproject.net
-Office:,719.886.4000
-Postal:,Joshua Project 
-,PO Box 62614
-,"Colorado Springs, CO 80962"
-,United States
