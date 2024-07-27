@@ -5,10 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JPScaleCtry Bar Chart</title>
     <script src="https://d3js.org/d3.v6.min.js"></script>
+	<style>
+    .tooltip {
+        position: absolute;
+        text-align: center;
+        width: auto;
+        height: auto;
+        padding: 10px;
+        font: 12px sans-serif;
+        background: lightsteelblue;
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
+    }
+</style>
 </head>
 <body>
     <div id="chart"></div>
     <script src="script.js"></script>
+	
+
 </body>
 </html>
 
@@ -20,21 +36,23 @@
 
         // Load the CSV data
 d3.csv(csvUrl).then(function(data) {
-    // Process data to get counts for each JPScaleCtry value
-    let scaleCounts = {};
+    // Process data to get counts and country lists for each JPScaleCtry value
+    let scaleData = {};
     data.forEach(function(d) {
         let scale = d.JPScaleCtry;
-        if (scaleCounts[scale]) {
-            scaleCounts[scale]++;
+        let country = d.Ctry;
+        if (scaleData[scale]) {
+            scaleData[scale].count++;
+            scaleData[scale].countries.push(country);
         } else {
-            scaleCounts[scale] = 1;
+            scaleData[scale] = { count: 1, countries: [country] };
         }
     });
 
-    // Convert counts to an array for D3
-    let countsArray = [];
-    for (let scale in scaleCounts) {
-        countsArray.push({ scale: scale, count: scaleCounts[scale] });
+    // Convert data to an array for D3
+    let dataArray = [];
+    for (let scale in scaleData) {
+        dataArray.push({ scale: scale, count: scaleData[scale].count, countries: scaleData[scale].countries });
     }
 
     // Set dimensions and margins for the chart
@@ -52,13 +70,13 @@ d3.csv(csvUrl).then(function(data) {
 
     // Set the x scale
     const x = d3.scaleBand()
-        .domain(countsArray.map(d => d.scale))
+        .domain(dataArray.map(d => d.scale))
         .range([0, width])
         .padding(0.1);
 
     // Set the y scale
     const y = d3.scaleLinear()
-        .domain([0, d3.max(countsArray, d => d.count)])
+        .domain([0, d3.max(dataArray, d => d.count)])
         .nice()
         .range([height, 0]);
 
@@ -73,14 +91,23 @@ d3.csv(csvUrl).then(function(data) {
 
     // Add bars
     svg.selectAll('.bar')
-        .data(countsArray)
+        .data(dataArray)
         .enter().append('rect')
         .attr('class', 'bar')
         .attr('x', d => x(d.scale))
         .attr('y', d => y(d.count))
         .attr('width', x.bandwidth())
         .attr('height', d => height - y(d.count))
-        .attr('fill', 'steelblue');
+        .attr('fill', 'steelblue')
+        .on('mouseover', function(event, d) {
+            tooltip.style('display', 'block')
+                   .html(`<strong>JP Scale: ${d.scale}</strong><br>Countries:<br>${d.countries.join(', ')}`)
+                   .style('left', (event.pageX + 5) + 'px')
+                   .style('top', (event.pageY - 28) + 'px');
+        })
+        .on('mouseout', function() {
+            tooltip.style('display', 'none');
+        });
 
     // Add x-axis label
     svg.append('text')
@@ -96,6 +123,16 @@ d3.csv(csvUrl).then(function(data) {
         .attr('y', -margin.left + 20)
         .attr('x', -height / 2 + margin.top)
         .text('Number of Countries');
-});
+
+    // Add tooltip
+    const tooltip = d3.select('body').append('div')
+        .attr('class', 'tooltip')
+        .style('position', 'absolute')
+        .style('display', 'none')
+        .style('background', 'lightsteelblue')
+        .style('border', '1px solid black')
+        .style('padding', '5px')
+        .style('border-radius', '5px');
+		});
 
     </script>
