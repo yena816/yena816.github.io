@@ -3,28 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JPScaleCtry Bar Chart</title>
+    <title>Joshua Project Data Visualization</title>
     <script src="https://d3js.org/d3.v6.min.js"></script>
 	<style>
-    .tooltip {
-        position: absolute;
-        text-align: center;
-        width: auto;
-        height: auto;
-        padding: 10px;
-        font: 12px sans-serif;
-        background: lightsteelblue;
-        border: 0px;
-        border-radius: 8px;
-        pointer-events: none;
-    }
-</style>
+    	.tooltip {
+        	position: absolute;
+	        text-align: center;
+	        width: auto;
+	        height: auto;
+	        padding: 10px;
+	        font: 12px sans-serif;
+	        background: lightsteelblue;
+	        border: 1px solid black;
+	        border-radius: 8px;
+	        pointer-events: none;
+    	}
+		.button {
+            margin: 10px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+	</style>
 </head>
 <body>
+    <button class="button" onclick="showBarChart()">Show Bar Chart</button>
+    <button class="button" onclick="showScatterPlot()">Show Scatter Plot</button>
     <div id="chart"></div>
     <script src="script.js"></script>
-	
-
 </body>
 </html>
 
@@ -34,105 +43,197 @@
         // Replace this URL with the raw URL of your CSV file in your GitHub repo
         const csvUrl = "https://raw.githubusercontent.com/yena816/yena816.github.io/main/AllCountriesListing.csv";
 
-        // Load the CSV data
-d3.csv(csvUrl).then(function(data) {
-    // Process data to get counts and country lists for each JPScaleCtry value
-    let scaleData = {};
-    data.forEach(function(d) {
-        let scale = d.JPScaleCtry;
-        let country = d.Ctry;
-        if (scaleData[scale]) {
-            scaleData[scale].count++;
-            scaleData[scale].countries.push(country);
-        } else {
-            scaleData[scale] = { count: 1, countries: [country] };
-        }
-    });
+        // Function to load the bar chart
+function showBarChart() {
+    d3.select("#chart").html(""); // Clear existing chart
 
-    // Convert data to an array for D3
-    let dataArray = [];
-    for (let scale in scaleData) {
-        dataArray.push({ scale: scale, count: scaleData[scale].count, countries: scaleData[scale].countries });
-    }
-
-    // Set dimensions and margins for the chart
-    const margin = { top: 20, right: 30, bottom: 60, left: 60 },
-          width = 800 - margin.left - margin.right,
-          height = 400 - margin.top - margin.bottom;
-
-    // Create SVG container
-    const svg = d3.select('#chart')
-        .append('svg')
-        .attr('width', width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom)
-        .append('g')
-        .attr('transform', `translate(${margin.left},${margin.top})`);
-
-    // Set the x scale
-    const x = d3.scaleBand()
-        .domain(dataArray.map(d => d.scale))
-        .range([0, width])
-        .padding(0.1);
-
-    // Set the y scale
-    const y = d3.scaleLinear()
-        .domain([0, d3.max(dataArray, d => d.count)])
-        .nice()
-        .range([height, 0]);
-
-    // Add the x axis
-    svg.append('g')
-        .attr('transform', `translate(0,${height})`)
-        .call(d3.axisBottom(x));
-
-    // Add the y axis
-    svg.append('g')
-        .call(d3.axisLeft(y));
-
-    // Add bars
-    svg.selectAll('.bar')
-        .data(dataArray)
-        .enter().append('rect')
-        .attr('class', 'bar')
-        .attr('x', d => x(d.scale))
-        .attr('y', d => y(d.count))
-        .attr('width', x.bandwidth())
-        .attr('height', d => height - y(d.count))
-        .attr('fill', 'steelblue')
-        .on('mouseover', function(event, d) {
-            tooltip.style('display', 'block')
-                   .html(`<strong>JP Scale: ${d.scale}</strong><br>Countries:<br>${d.countries.join(', ')}`)
-                   .style('left', (event.pageX + 5) + 'px')
-                   .style('top', (event.pageY - 28) + 'px');
-        })
-        .on('mouseout', function() {
-            tooltip.style('display', 'none');
+    d3.csv(csvUrl).then(function(data) {
+        // Process data to get counts and country lists for each JPScaleCtry value
+        let scaleData = {};
+        data.forEach(function(d) {
+            let scale = d.JPScaleCtry;
+            let country = d.Ctry;
+            if (scaleData[scale]) {
+                scaleData[scale].count++;
+                scaleData[scale].countries.push(country);
+            } else {
+                scaleData[scale] = { count: 1, countries: [country] };
+            }
         });
 
-    // Add x-axis label
-    svg.append('text')
-        .attr('text-anchor', 'end')
-        .attr('x', width / 2 + margin.left)
-        .attr('y', height + margin.bottom - 10)
-        .text('JP Scale');
+        // Convert data to an array for D3
+        let dataArray = [];
+        for (let scale in scaleData) {
+            dataArray.push({ scale: scale, count: scaleData[scale].count, countries: scaleData[scale].countries });
+        }
 
-    // Add y-axis label
-    svg.append('text')
-        .attr('text-anchor', 'end')
-        .attr('transform', 'rotate(-90)')
-        .attr('y', -margin.left + 20)
-        .attr('x', -height / 2 + margin.top)
-        .text('Number of Countries');
+        // Set dimensions and margins for the chart
+        const margin = { top: 20, right: 30, bottom: 60, left: 60 },
+              width = 800 - margin.left - margin.right,
+              height = 400 - margin.top - margin.bottom;
 
-    // Add tooltip
-    const tooltip = d3.select('body').append('div')
-        .attr('class', 'tooltip')
-        .style('position', 'absolute')
-        .style('display', 'none')
-        .style('background', 'lightsteelblue')
-        .style('border', '1px solid black')
-        .style('padding', '5px')
-        .style('border-radius', '5px');
-		});
+        // Create SVG container
+        const svg = d3.select('#chart')
+            .append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+            .append('g')
+            .attr('transform', `translate(${margin.left},${margin.top})`);
+
+        // Set the x scale
+        const x = d3.scaleBand()
+            .domain(dataArray.map(d => d.scale))
+            .range([0, width])
+            .padding(0.1);
+
+        // Set the y scale
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(dataArray, d => d.count)])
+            .nice()
+            .range([height, 0]);
+
+        // Add the x axis
+        svg.append('g')
+            .attr('transform', `translate(0,${height})`)
+            .call(d3.axisBottom(x));
+
+        // Add the y axis
+        svg.append('g')
+            .call(d3.axisLeft(y));
+
+        // Add bars
+        svg.selectAll('.bar')
+            .data(dataArray)
+            .enter().append('rect')
+            .attr('class', 'bar')
+            .attr('x', d => x(d.scale))
+            .attr('y', d => y(d.count))
+            .attr('width', x.bandwidth())
+            .attr('height', d => height - y(d.count))
+            .attr('fill', 'steelblue')
+            .on('mouseover', function(event, d) {
+                tooltip.style('display', 'block')
+                       .html(`<strong>JP Scale: ${d.scale}</strong><br>Countries:<br>${d.countries.join(', ')}`)
+                       .style('left', (event.pageX + 5) + 'px')
+                       .style('top', (event.pageY - 28) + 'px');
+            })
+            .on('mouseout', function() {
+                tooltip.style('display', 'none');
+            });
+
+        // Add x-axis label
+        svg.append('text')
+            .attr('text-anchor', 'end')
+            .attr('x', width / 2 + margin.left)
+            .attr('y', height + margin.bottom - 10)
+            .text('JP Scale');
+
+        // Add y-axis label
+        svg.append('text')
+            .attr('text-anchor', 'end')
+            .attr('transform', 'rotate(-90)')
+            .attr('y', -margin.left + 20)
+            .attr('x', -height / 2 + margin.top)
+            .text('Number of Countries');
+
+        // Add tooltip
+        const tooltip = d3.select('body').append('div')
+            .attr('class', 'tooltip')
+            .style('position', 'absolute')
+            .style('display', 'none')
+            .style('background', 'lightsteelblue')
+            .style('border', '1px solid black')
+            .style('padding', '5px')
+            .style('border-radius', '5px');
+    });
+}
+
+// Function to load the scatter plot
+function showScatterPlot() {
+    d3.select("#chart").html(""); // Clear existing chart
+
+    d3.csv('https://raw.githubusercontent.com/yena816/yena816.github.io/main/UnreachedPeoplesByCountry.csv').then(function(data) {
+        // Set dimensions and margins for the chart
+        const margin = { top: 20, right: 30, bottom: 60, left: 60 },
+              width = 800 - margin.left - margin.right,
+              height = 400 - margin.top - margin.bottom;
+
+        // Create SVG container
+        const svg = d3.select('#chart')
+            .append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+            .append('g')
+            .attr('transform', `translate(${margin.left},${margin.top})`);
+
+        // Set the x scale
+        const x = d3.scaleLinear()
+            .domain([0, 5]) // Assuming JPScale ranges from 0 to 5
+            .range([0, width]);
+
+        // Set the y scale
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(data, d => +d.BibleStatus)])
+            .nice()
+            .range([height, 0]);
+
+        // Add the x axis
+        svg.append('g')
+            .attr('transform', `translate(0,${height})`)
+            .call(d3.axisBottom(x));
+
+        // Add the y axis
+        svg.append('g')
+            .call(d3.axisLeft(y));
+
+        // Add points
+        svg.selectAll('.dot')
+            .data(data)
+            .enter().append('circle')
+            .attr('class', 'dot')
+            .attr('cx', d => x(d.JPScale))
+            .attr('cy', d => y(d.BibleStatus))
+            .attr('r', 5)
+            .attr('fill', 'steelblue')
+            .on('mouseover', function(event, d) {
+                tooltip.style('display', 'block')
+                       .html(`<strong>Ctry: ${d.Ctry}</strong><br>PeopName: ${d.PeopName}<br>JP Scale: ${d.JPScale}<br>BibleStatus: ${d.BibleStatus}`)
+                       .style('left', (event.pageX + 5) + 'px')
+                       .style('top', (event.pageY - 28) + 'px');
+            })
+            .on('mouseout', function() {
+                tooltip.style('display', 'none');
+            });
+
+        // Add x-axis label
+        svg.append('text')
+            .attr('text-anchor', 'end')
+            .attr('x', width / 2 + margin.left)
+            .attr('y', height + margin.bottom - 10)
+            .text('JP Scale');
+
+        // Add y-axis label
+        svg.append('text')
+            .attr('text-anchor', 'end')
+            .attr('transform', 'rotate(-90)')
+            .attr('y', -margin.left + 20)
+            .attr('x', -height / 2 + margin.top)
+            .text('Bible Status');
+
+        // Add tooltip
+        const tooltip = d3.select('body').append('div')
+            .attr('class', 'tooltip')
+            .style('position', 'absolute')
+            .style('display', 'none')
+            .style('background', 'lightsteelblue')
+            .style('border', '1px solid black')
+            .style('padding', '5px')
+            .style('border-radius', '5px');
+    });
+}
+
+// Load the bar chart by default
+showBarChart();
+
 
     </script>

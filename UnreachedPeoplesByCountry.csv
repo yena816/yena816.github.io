@@ -1,6 +1,4 @@
-﻿Joshua Project People Group Data
-
-ROG3,Ctry,PeopleID3,ROP3,PeopNameAcrossCountries,PeopNameInCountry,Population,JPScale,LeastReached,ROL3,PrimaryLanguageName,BibleStatus,RLG3,PrimaryReligion,PercentAdherents,PercentEvangelical,PeopleID1,ROP1,AffinityBloc,PeopleID2,ROP2,PeopleCluster,CountOfCountries,RegionCode,RegionName,ROG2,Continent,10_40Window,IndigenousCode,WorkersNeeded,Frontier,Latitude,Longitude
+﻿ROG3,Ctry,PeopleID3,ROP3,PeopNameAcrossCountries,PeopNameInCountry,Population,JPScale,LeastReached,ROL3,PrimaryLanguageName,BibleStatus,RLG3,PrimaryReligion,PercentAdherents,PercentEvangelical,PeopleID1,ROP1,AffinityBloc,PeopleID2,ROP2,PeopleCluster,CountOfCountries,RegionCode,RegionName,ROG2,Continent,10_40Window,IndigenousCode,WorkersNeeded,Frontier,Latitude,Longitude
 AF,Afghanistan,14372,107989,"Afghan, Tajik","Afghan, Tajik",11983000,1,Y,prs,Dari,5,6,Islam,0.010,0.010,14,A005,Persian-Median,299,C0211,Tajik,4,5,"Asia, Central",ASI,Asia,Y,Y,240,Y,31.15621,62.14612
 AF,Afghanistan,19409,100096,Afshari,Afshari,16000,1,Y,azb,"Azerbaijani, South",5,6,Islam,0.039,0.039,24,A015,"Turkic Peoples",126,C0028,Azerbaijani,2,5,"Asia, Central",ASI,Asia,Y,N,1,Y,34.447959999954,69.289760000024
 AF,Afghanistan,21454,118270,Aimaq,Aimaq,1777000,1,Y,aiq,Aimaq,0,6,Islam,0.000,0.000,14,A005,Persian-Median,268,C0179,Persian,5,5,"Asia, Central",ASI,Asia,Y,Y,36,Y,35.00501,63.128594
@@ -7216,21 +7214,3 @@ ZA,Zambia,15145,109644,Swahili,Swahili,53000,1,Y,swh,Swahili,5,6,Islam,0.000,0.0
 ZA,Zambia,15988,110980,Yao,Yao,5700,1,Y,yao,Yao,5,6,Islam,3.000,1.000,22,A013,"Sub-Saharan Peoples",132,C0035,"Bantu, Makua-Yao",4,7,"Africa, East and Southern",AFR,Africa,N,N,1,N,-13.671477,32.688724
 ZI,Zimbabwe,20657,117074,"Doma, Vadoma","Doma, Vadoma",22000,1,Y,sna,Shona,5,4,"Ethnic Religions",0.300,0.300,22,A013,"Sub-Saharan Peoples",348,C0272,"Bantu, Shona",1,7,"Africa, East and Southern",AFR,Africa,N,Y,1,N,-17.849899,31.008405
 ZI,Zimbabwe,13533,106317,"Jewish, Marathi-speaking","Jewish, Marathi-speaking",7600,1,Y,mar,Marathi,5,4,"Ethnic Religions",0.000,0.000,21,A012,"South Asian Peoples",442,A012,"South Asia Hindu - other",4,7,"Africa, East and Southern",AFR,Africa,N,N,1,Y,-17.803466650266,31.078256727566
-
-Bible Translation status:
-0,Unspecified
-1,Translation Needed
-2,Translation Started
-3,Portions
-4,New Testament
-5,Complete Bible
-
-"Joshua Project welcomes corrections / updates to this data.  Please send feedback to:"
-
-Email:,info@joshuaproject.net
-Web:,www.joshuaproject.net
-Office:,719.886.4000
-Postal:,Joshua Project 
-,PO Box 62614
-,"Colorado Springs, CO 80962"
-,United States
