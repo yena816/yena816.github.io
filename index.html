@@ -21,7 +21,7 @@
         }
 
         .button {
-            margin: 10px;
+            margin: 0px;
             padding: 10px;
             background-color: #4CAF50;
             color: white;
@@ -33,9 +33,23 @@
 </head>
 
 <body>
-    <button class="button" onclick="showBarChart()">Show Bar Chart</button>
-    <button class="button" onclick="showScatterPlot()">Show Scatter Plot</button>
+    <h1>Joshua Project Statistics</h1>
+    <p>The Joshua Project is a non-profit Christian organization that provides a comprehensive
+        people group database of the world. Joshua Project highlights peoples and places with
+        the least access or response to the gospel so the Christian church can prioritize its
+        prayer and mission efforts. The data shown in the following charts is taken from the
+        official Joshua Project website.
+    </p>
+    
+    <button class="button" onclick="showBarChart()">1</button>
+    <button class="button" onclick="showScatterPlot()">2</button>
     <div id="chart"></div>
+    <p>
+        The JP Scale is a number defined by the Joshua Project on a scale of 1-5 that gives an
+        idea of how reached by the gospel each people group is. 
+        Each people group in each country is given a category on the scale from 1 - unreached
+        to 5 - significantly reached.
+    </p>
 </body>
 
 </html>
@@ -129,7 +143,7 @@
             svg.append('text')
                 .attr('text-anchor', 'end')
                 .attr('x', width / 2 + margin.left)
-                .attr('y', height + margin.bottom - 10)
+                .attr('y', height + margin.bottom - 20)
                 .text('JP Scale');
 
             // Add y-axis label
@@ -231,7 +245,7 @@
                 .attr('fill', 'steelblue')
                 .on('mouseover', function (event, d) {
                     tooltip.style('display', 'block')
-                        .html(`<strong>Country: ${d.country}</strong><br>PeopNames: ${d.peopNames}<br>Avg Percent Evangelical: ${d.avgPercentEvangelical}<br>Avg Bible Status: ${d.avgBibleStatus}`)
+                        .html(`<strong>Country: ${d.country}</strong><br>Avg Percent Evangelical: ${d.avgPercentEvangelical}<br>Avg Bible Status: ${d.avgBibleStatus}`)
                         .style('left', (event.pageX + 5) + 'px')
                         .style('top', (event.pageY - 28) + 'px');
                 })
