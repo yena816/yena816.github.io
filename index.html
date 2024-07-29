@@ -29,6 +29,11 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+        .annotation {
+            font-size: 16px;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -40,19 +45,19 @@
         prayer and mission efforts. The data shown in the following charts is taken from the
         official Joshua Project website.
     </p>
-    
+
     <button class="button" onclick="showBarChart()">1</button>
     <button class="button" onclick="showScatterPlot()">2</button>
     <div id="chart"></div>
     <p>
         The JP Scale is a number defined by the Joshua Project on a scale of 1-5 that gives an
-        idea of how reached by the gospel each people group is. 
+        idea of how reached by the gospel each people group is.
         Each people group in each country is given a category on the scale from 1 - unreached
         to 5 - significantly reached.
     </p>
     <p>
-        The Bible Status number is a scale from 0-5 and indicates the completeness of a Bible 
-        translation in a people group's language. The scale is: 
+        The Bible Status number is a scale from 0-5 and indicates the completeness of a Bible
+        translation in a people group's language. The scale is:
         <li>0 - Unspecified</li>
         <li>1 - Translation needed</li>
         <li>2 - Translation started</li>
@@ -96,7 +101,7 @@
             }
 
             // Set dimensions and margins for the chart
-            const margin = { top: 20, right: 30, bottom: 60, left: 60 },
+            const margin = { top: 60, right: 30, bottom: 60, left: 60 },
                 width = 800 - margin.left - margin.right,
                 height = 400 - margin.top - margin.bottom;
 
@@ -107,6 +112,17 @@
                 .attr('height', height + margin.top + margin.bottom)
                 .append('g')
                 .attr('transform', `translate(${margin.left},${margin.top})`);
+
+            // Add annotation text box using foreignObject
+            svg.append('foreignObject')
+                .attr('x', width / 2 - 200)
+                .attr('y', -50)
+                .attr('width', 400)
+                .attr('height', 50)
+                .append('xhtml:div')
+                .attr('class', 'annotation')
+                .style('text-align', 'center')
+                .html('This bar chart shows the number of countries at each JP scale level (0-5).');
 
             // Set the x scale
             const x = d3.scaleBand()
@@ -153,7 +169,7 @@
             svg.append('text')
                 .attr('text-anchor', 'end')
                 .attr('x', width / 2 + margin.left)
-                .attr('y', height + margin.bottom - 20)
+                .attr('y', height + margin.bottom - 10)
                 .text('JP Scale');
 
             // Add y-axis label
@@ -212,7 +228,7 @@
             }
 
             // Set dimensions and margins for the chart
-            const margin = { top: 20, right: 30, bottom: 60, left: 60 },
+            const margin = { top: 20, right: 30, bottom: 80, left: 60 },
                 width = 800 - margin.left - margin.right,
                 height = 400 - margin.top - margin.bottom;
 
@@ -278,6 +294,17 @@
                 .attr('x', -height / 2 + margin.top)
                 .text('Bible Status');
 
+            // Add annotation text box using foreignObject
+            svg.append('foreignObject')
+                .attr('x', width - 400)
+                .attr('y', height + margin.bottom - 150)
+                .attr('width', 400)
+                .attr('height', 50)
+                .append('xhtml:div')
+                .attr('class', 'annotation')
+                .style('text-align', 'right')
+                .html('This scatter plot shows the average Percent Evangelical vs Bible Status for each unreached country (JPScale = 1). ');
+
             // Add tooltip
             const tooltip = d3.select('body').append('div')
                 .attr('class', 'tooltip')
@@ -292,6 +319,8 @@
 
     // Load the bar chart by default
     showBarChart();
+
+
 
 
 
