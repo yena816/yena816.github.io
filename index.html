@@ -45,6 +45,7 @@
         prayer and mission efforts. The data shown in the following charts is taken from the
         official Joshua Project website.
     </p>
+    <p>Click below for the different charts: </p>
 
     <button class="button" onclick="showBarChart()">1</button>
     <button class="button" onclick="showScatterPlot()">2</button>
@@ -118,11 +119,11 @@
                 .attr('x', width / 2 - 200)
                 .attr('y', -50)
                 .attr('width', 400)
-                .attr('height', 50)
+                .attr('height', 100)
                 .append('xhtml:div')
                 .attr('class', 'annotation')
                 .style('text-align', 'center')
-                .html('This bar chart shows the number of countries at each JP scale level (0-5).');
+                .html('This bar chart shows the number of countries at each JP scale level (0-5). Mouse over the bars to see which countries are at each scale level.');
 
             // Set the x scale
             const x = d3.scaleBand()
@@ -296,14 +297,14 @@
 
             // Add annotation text box using foreignObject
             svg.append('foreignObject')
-                .attr('x', width - 400)
+                .attr('x', width - 450)
                 .attr('y', height + margin.bottom - 150)
-                .attr('width', 400)
-                .attr('height', 50)
+                .attr('width', 450)
+                .attr('height', 80)
                 .append('xhtml:div')
                 .attr('class', 'annotation')
                 .style('text-align', 'right')
-                .html('This scatter plot shows the average Percent Evangelical vs Bible Status for each unreached country (JPScale = 1). ');
+                .html('This scatter plot shows the average Percent Evangelical vs Bible Status for each unreached country (JPScale = 1). Mouse over the points to see the numbers for each country.');
 
             // Add tooltip
             const tooltip = d3.select('body').append('div')
